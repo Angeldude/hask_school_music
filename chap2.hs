@@ -55,4 +55,12 @@ fi o d = note d (Fi, o)
 ms o d = note d (MS, o)
 
 fromBlues :: Music BluesPitch -> Music Pitch
-fromBlues = undefined
+fromBlues (Prim (Note d (Ro, o))) = note d (C, o)
+fromBlues (Prim (Note d (MT, o))) = note d (Ef, o)
+fromBlues (Prim (Note d (Fo, o))) = note d (F, o)
+fromBlues (Prim (Note d (Fi, o))) = note d (G, o)
+fromBlues (Prim (Note d (MS, o))) = note d (Bf, o)
+fromBlues (Prim (Rest d)) = Prim (Rest d)
+fromBlues (m1 :+: m2) = fromBlues m1 :+: fromBlues m2
+fromBlues (m1 :=: m2) = fromBlues m1 :=: fromBlues m2
+fromBlues (Modify cntrl m) = Modify cntrl (fromBlues m)
