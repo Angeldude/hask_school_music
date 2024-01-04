@@ -43,3 +43,16 @@ twoFiveOne p d = let
 -- fromBlues (Modify...) = ...
 -- 5. Write out a few melodies of type Music BluesPitch, and play them using
 -- fromBlues and play
+
+data BluesPitchClass = Ro | MT | Fo | Fi | MS
+type BluesPitch = (BluesPitchClass, Octave)
+
+ro, mt, fo, fi, ms :: Octave -> Dur -> Music BluesPitch
+ro o d = note d (Ro, o)
+mt o d = note d (MT, o)
+fo o d = note d (Fo, o) 
+fi o d = note d (Fi, o)
+ms o d = note d (MS, o)
+
+fromBlues :: Music BluesPitch -> Music Pitch
+fromBlues = undefined
