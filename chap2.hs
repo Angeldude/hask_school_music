@@ -64,3 +64,5 @@ fromBlues (Prim (Rest d)) = Prim (Rest d)
 fromBlues (m1 :+: m2) = fromBlues m1 :+: fromBlues m2
 fromBlues (m1 :=: m2) = fromBlues m1 :=: fromBlues m2
 fromBlues (Modify cntrl m) = Modify cntrl (fromBlues m)
+
+melody oct = ro oct qn :+: mt oct qn :+: ms oct en :+: fo oct en :=: ms oct en :+: fi oct qn :=: ms oct qn :+: fo oct en :=: ms oct en
