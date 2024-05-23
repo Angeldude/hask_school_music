@@ -60,9 +60,41 @@ fromBlues (Prim (Note d (MT, o))) = note d (Ef, o)
 fromBlues (Prim (Note d (Fo, o))) = note d (F, o)
 fromBlues (Prim (Note d (Fi, o))) = note d (G, o)
 fromBlues (Prim (Note d (MS, o))) = note d (Bf, o)
-fromBlues (Prim (Rest d)) = Prim (Rest d)
+fromBlues (Prim (Rest d)) = rest d
 fromBlues (m1 :+: m2) = fromBlues m1 :+: fromBlues m2
 fromBlues (m1 :=: m2) = fromBlues m1 :=: fromBlues m2
 fromBlues (Modify cntrl m) = Modify cntrl (fromBlues m)
 
 melody oct = ro oct qn :+: mt oct qn :+: ms oct en :+: fo oct en :=: ms oct en :+: fi oct qn :=: ms oct qn :+: fo oct en :=: ms oct en
+
+melody2 oct = ro oct en :+: mt oct qn :+: ro oct en :+: mt oct qn :+: ro oct hn :+: rest hn :+: fi oct en :+: fo oct qn :+: mt oct en :+: ro (oct+1) hn :=: fo oct wn :=: ms oct wn
+
+-- Exercise 2.3 Show that abspitch (pitch ap) = ap and, up to enharmonic equivalences, pitch (abspitch p) = p.
+
+abspitchEquiv = absPitch (pitch 60) == 60
+-- absPitch (C, 4) == 60
+-- 60 == 60
+pitchEquiv = pitch (absPitch (Bs, 3)) == (C, 4)
+-- pitch (60) == (C, 4)
+-- (C,4) == (C, 4)
+
+-- Exercise 2.4 Show that trans i (trans j p) = trans (i + j) p.
+transposed = trans 4 (trans 5 (C, 4)) == trans 9 (C, 4)
+-- trans 4 (trans 5 (C, 4)) == (A, 4)
+-- trans 4 (F, 4) == (A, 4)
+-- (A, 4) == (A, 4)
+
+-- Exercise 2.5 Transpose is part of the Control data type, which in turn is part of the Music data type. Its use in transposing a Music value is thus a kind of “annotation”—it doesn’t really change the Music value, it just annotates it as something that is transposed. Define instead a recursive function transM ::AbsPitch → Music Pitch → Music Pitch that actually changes each note in a Music Pitch value by transposing it by the interval represented by the first argument.
+-- Hint: To do this properly, you will have to pattern match against the Music value, something like this:
+-- transM ap (Prim (Note d p)) = ...
+-- transM ap (Prim (Rest d)) = ...
+-- transM ap (m1 :+: m2) = ...
+-- transM ap (m1 :=: m2) = ...
+-- transM ap (Modify...) = ...
+
+transM :: AbsPitch -> Music Pitch -> Music Pitch
+transM ap (Prim (Rest d)) = rest d
+transM ap (Prim (Note d p)) = note d (trans ap p)
+transM ap (m1 :+: m2) = transM ap m1 :+: transM ap m2
+transM ap (m1 :=: m2) = transM ap m1 :=: transM ap m2
+transM ap (Modify cntrl m) = Modify cntrl (transM ap m)
