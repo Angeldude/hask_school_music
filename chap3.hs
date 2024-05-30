@@ -21,3 +21,42 @@ f2 = map rest
 f3 :: [Music Pitch] -> [Music Pitch]
 f3 ps = let f (Prim (Note d p)) = (note (d/2) p) :+: rest (d/2)
         in map f ps
+     
+-- Exercise 3.2 Show that flip (flip f) is the same as f .
+-- flip (flip f x y)
+-- flip f y x
+-- f x y
+-- Exercise 3.3 Define the type of ys in:
+-- xs = [1, 2, 3] :: [Integer]
+-- ys = map (+) xs
+-- ys :: [Integer -> Integer]
+     
+-- Exercise 3.4 Define a function applyEach that, given a list of functions,
+-- applies each to some given value. For example:
+-- applyEach [simple 2 2,(+3)] 5 => [14, 8]
+-- where simple is as defined in Chapter 1
+
+applyEach :: [(a -> b)] -> a -> [b]
+applyEach [] _ = []
+applyEach (fn:fns) val = fn val : applyEach fns val
+
+applyEach' fns val = let flipped x fn = fn x
+                    in map (flipped val) fns
+
+applyEach'' fns val = map (flip id val) fns
+
+applyEach''' fns val = map ($ val) fns
+
+-- Exercise 3.5 Define a function applyAll that, given a list of functions
+-- [f1, f2, ..., fn] and a value v, returns the result f1 (f2 (...(fn v)...)). For
+-- example:
+-- applyAll [simple 2 2,(+3)] 5 => 20
+
+simple x y z = x * (y + z)
+
+applyAll :: [(a -> a)] -> a -> a
+applyAll fns v = let f op acc = op acc
+                 in foldr f v fns
+
+applyAll' :: [(a -> a)] -> a -> a                 
+applyAll' fns v = foldr ($) v fns
