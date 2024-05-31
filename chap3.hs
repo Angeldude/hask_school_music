@@ -60,3 +60,8 @@ applyAll fns v = let f op acc = op acc
 
 applyAll' :: [(a -> a)] -> a -> a                 
 applyAll' fns v = foldr ($) v fns
+
+-- Exercise 3.7 Rewrite the definition of length non-recursively
+length' :: [a] -> Integer
+length' xs = let plusOne _ y = y + 1
+             in foldr plusOne 0 xs
