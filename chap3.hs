@@ -65,3 +65,31 @@ applyAll' fns v = foldr ($) v fns
 length' :: [a] -> Integer
 length' xs = let plusOne _ y = y + 1
              in foldr plusOne 0 xs
+             
+-- Exercise 3.8 Define a function that behaves as each of the following:
+-- a) Doubles each number in a list. For example:
+-- doubleEach [1, 2, 3] => [2, 4, 6]
+-- b) Pairs each element in a list with that number and one plus that number. For
+-- example:
+-- pairAndOne [1, 2, 3] => [(1, 2),(2, 3),(3, 4)]
+-- c) Adds together each pair of numbers in a list. For example:
+-- addEachPair [(1, 2),(3, 4),(5, 6)] => [3, 7, 11 ]
+-- d) Adds “pointwise” the elements of a list of pairs. For example:
+-- addPairsPointwise [(1, 2),(3, 4),(5, 6)] => (9, 12)
+
+doubleEach :: [Integer] -> [Integer]
+doubleEach = map (* 2)
+
+pairAndOne :: [Integer] -> [(Integer, Integer)]
+pairAndOne = let pairing x = (x, x+1)
+             in map pairing
+ 
+addEachPair :: [(Integer, Integer)] -> [Integer] 
+addEachPair = let addPair (x,y) = x + y
+              in map addPair
+
+addPairsPointwise :: [(Integer, Integer)] -> (Integer, Integer)              
+addPairsPointwise xs = let pointWise (a,b) (c,d) = (a+c, b+d)
+                       in foldr1 pointWise xs
+
+doesItAll = addPairsPointwise . pairAndOne . addEachPair . pairAndOne . doubleEach
