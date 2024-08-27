@@ -93,3 +93,20 @@ addPairsPointwise xs = let pointWise (a,b) (c,d) = (a+c, b+d)
                        in foldr1 pointWise xs
 
 doesItAll = addPairsPointwise . pairAndOne . addEachPair . pairAndOne . doubleEach
+
+-- Exercise 3.9 Define a polymorphic function fuse :: [Dur] → [Dur →
+-- Music a] → [Music a] that combines a list of durations with a list of notes
+-- lacking a duration, to create a list of complete notes. For example:
+-- fuse [qn, hn,sn] [c 4, d 4, e 4]
+-- ⇒ [c 4 qn, d 4 hn, e 4 sn]
+-- You may signal an error if the lists have unequal lengths.
+-- In the next two exercises, give both recursive and (if possible) non-recursive
+-- definitions, and be sure to include type signatures.
+
+fuse :: [Dur] -> [Dur -> Music a] -> [Music a]
+fuse [] [] = []
+fuse _ [] = error "Your duration list is not right length!"
+fuse [] _ = error "Your music a list is not right length!"
+fuse (x:xs) (y:ys) = y x : fuse xs ys
+
+fuse' durs notes = undefined
